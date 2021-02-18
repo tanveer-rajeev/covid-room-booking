@@ -8,10 +8,10 @@
 		<version>2.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.assignment</groupId>
-	<artifactId>blog</artifactId>
+	<groupId>com.covid-room</groupId>
+	<artifactId>booking</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>blog</name>
+	<name>booking</name>
 	<description>Home assignment</description>
 
 	<properties>

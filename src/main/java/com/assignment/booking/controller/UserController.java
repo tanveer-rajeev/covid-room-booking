@@ -24,9 +24,6 @@ public class UserController {
     @PostMapping
     public User createUser(@Valid @RequestBody User user) throws Exception {
 
-//        if(bindingResult.hasErrors()){
-//            throw new ResourceNotFoundException("username/password invalid");
-//        }
         return userService.signUpUser(user);
     }
 

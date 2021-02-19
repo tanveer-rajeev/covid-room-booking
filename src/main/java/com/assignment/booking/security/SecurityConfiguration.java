@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @EnableWebSecurity
@@ -38,15 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().
                  addFilter(new AuthenticationFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().logout()
-                         .logoutUrl("/logout")
-                          .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
-                             .clearAuthentication(true)
-                              .invalidateHttpSession(true)
-                          .deleteCookies("JSESSIONID")
-                           .logoutSuccessUrl("/login");
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 }

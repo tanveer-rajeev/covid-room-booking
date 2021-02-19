@@ -52,7 +52,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User signUpUser(User user) {
+    public User signUpUser(User user) throws Exception {
 
         if (userRepository.findByUserName(user.getUserName()) != null) {
             throw new ResourceNotFoundException("User name already exist: "+user.getUserName());
@@ -61,7 +61,7 @@ public class UserServiceImplementation implements UserService {
         if(Validation.checkPasswordValidation(user.getPassword())){
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }else {
-            throw new ResourceNotFoundException("Password should be 6 character and contains with any symbol");
+            throw new Exception("Password should be 6 character and contains with any symbol");
         }
 
         return userRepository.save(user);

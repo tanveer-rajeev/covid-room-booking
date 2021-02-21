@@ -1,16 +1,18 @@
 package com.assignment.booking.controller;
 
+import com.assignment.booking.DTO.UserDTO;
 import com.assignment.booking.entity.User;
 
 import com.assignment.booking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("*")
+
 public class UserController {
 
     private final UserService userService;
@@ -22,7 +24,7 @@ public class UserController {
 
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) throws Exception {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO user) throws Exception {
 
         return userService.signUpUser(user);
     }
@@ -31,5 +33,6 @@ public class UserController {
     public User getUserById(@PathVariable Integer id){
         return userService.getUserById(id);
     }
+
 
 }

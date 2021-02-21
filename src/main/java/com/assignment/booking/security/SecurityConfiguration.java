@@ -1,4 +1,5 @@
 package com.assignment.booking.security;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,19 +28,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/users/**")
+        http
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST , "/users/**")
                 .permitAll()
-                .anyRequest().authenticated()
-                .and().
-                 addFilter(new AuthenticationFilter(authenticationManager()))
+                .anyRequest()
+                .authenticated()
+
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+
+                .and()
+                .addFilter(new AuthenticationFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement()
+                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 }

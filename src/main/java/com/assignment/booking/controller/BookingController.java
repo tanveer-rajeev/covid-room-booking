@@ -24,11 +24,11 @@ public class BookingController {
         this.roomRepository = roomRepository;
     }
 
-    @PostMapping("/{roomId}")
-    public ResponseEntity<?> createBooking(@RequestBody BookingDTO booking , @PathVariable Integer roomId) throws
+    @PostMapping("/{roomName}")
+    public ResponseEntity<?> createBooking(@RequestBody BookingDTO booking , @PathVariable String roomName) throws
             ParseException {
 
-        return bookingService.makeBooking(booking,roomId);
+        return bookingService.makeBooking(booking,roomName);
     }
 
     @GetMapping("/getCapacity/{date}")

@@ -35,7 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            cred.getUserName()
+                            cred.getUsername()
                             ,cred.getPassword(),
                             new ArrayList<>()
                     )
@@ -60,6 +60,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         response.addHeader(SecurityConstants.HEADER_STRING,SecurityConstants.TOKEN_PREFIX+token);
-        response.addHeader(SecurityConstants.CROSS_ORIGIN,"*");
+         //response.addHeader(SecurityConstants.CROSS_ORIGIN,"*");
     }
 }

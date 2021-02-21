@@ -24,7 +24,7 @@ public class User implements Serializable {
 
     @NotNull
     @Size(min = 3, message = "username should have at least 3 character")
-    private String userName;
+    private String username;
 
     private String password;
 

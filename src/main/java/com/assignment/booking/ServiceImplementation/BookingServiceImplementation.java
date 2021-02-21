@@ -1,6 +1,7 @@
 package com.assignment.booking.ServiceImplementation;
 
 import com.assignment.booking.DTO.BookingDTO;
+import com.assignment.booking.Exception.BookedNotificationHandler;
 import com.assignment.booking.Exception.ResourceNotFoundException;
 import com.assignment.booking.DTO.BookedInfo;
 import com.assignment.booking.entity.Booking;
@@ -11,6 +12,7 @@ import com.assignment.booking.repository.UserRepository;
 import com.assignment.booking.response.RoomResponse;
 import com.assignment.booking.service.BookingService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class BookingServiceImplementation implements BookingService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
+    @Autowired
     public BookingServiceImplementation(BookingRepository bookingRepository , RoomRepository roomRepository ,
                                         ModelMapper modelMapper , UserRepository userRepository) {
         this.bookingRepository = bookingRepository;
@@ -52,11 +55,11 @@ public class BookingServiceImplementation implements BookingService {
 
     // TODO: Make Booking
     @Override
-    public ResponseEntity<?> makeBooking(BookingDTO bookingDTO , Integer roomId) throws ParseException {
+    public ResponseEntity<?> makeBooking(BookingDTO bookingDTO , String roomName) throws ParseException {
         Booking bookingRequest = modelMapper.map(bookingDTO , Booking.class);
 
         // check given user name validation during booking
-        if (userRepository.findByUserName(bookingRequest.getUsername()) == null) {
+        if (userRepository.findByUsername(bookingRequest.getUsername()) == null) {
             throw new ResourceNotFoundException("User name not found in the system " + bookingRequest.getUsername());
         }
 
@@ -65,19 +68,10 @@ public class BookingServiceImplementation implements BookingService {
             throw new ResourceNotFoundException("Booking date not valid " + bookingRequest.getBookingDate());
         }
 
-
-        Room requestedRoom = roomRepository
-                .findById(roomId)
-                .stream()
-                .filter(room -> room
-                        .getId()
-                        .equals(roomId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found: " + roomId));
+        Room requestedRoom = roomRepository.findByRoomName(roomName);
 
         List<Booking> bookingList = requestedRoom.getBooking();
         bookingRequest.setRoom(requestedRoom);
-
 
         if (isWorkingPlaceAvailable(bookingRequest , bookingList)) {
 
@@ -87,18 +81,20 @@ public class BookingServiceImplementation implements BookingService {
         }
 
         BookedInfo bookedInfo = getInformedForAvailableRoom(requestedRoom , bookingRequest.getBookingDate());
-        return new ResponseEntity<>(bookedInfo , HttpStatus.NOT_FOUND);
+
+        //return new ResponseEntity<>(bookedInfo , HttpStatus.ACCEPTED);
+
+        // Documentation is written  into "GlobalExceptionHandler"
+        throw new BookedNotificationHandler("Already booked name list",bookedInfo );
     }
 
     // TODO: Get Capacity
-    public int getCapacityFreeWorkingPlace(String requestedBookingDate) throws ParseException{
+    public int getCapacityFreeWorkingPlace(String requestedBookingDate) throws ParseException {
 
-        if(!checkValidationOfBookingDate(requestedBookingDate)){
+        if (!checkValidationOfBookingDate(requestedBookingDate)) {
             throw new ResourceNotFoundException("Booking date not valid " + requestedBookingDate);
         }
 
-        Set<RoomResponse> allAvailableRoomName = new HashSet<>();
-        boolean alreadyBooked = false;
         List<Room> roomList = roomRepository.findAll();
         double numberOfWorkingPlace = 0;
         double currentRoomCapacity = 0;
@@ -110,17 +106,15 @@ public class BookingServiceImplementation implements BookingService {
             numberOfWorkingPlace += bookedRoom.getCapacity();
 
 
-                for (Booking booked: bookingList) {
-                    if (booked
-                            .getBookingDate()
-                            .equals(requestedBookingDate)) {
-                        currentRoomCapacity++;
-                    }
+            for (Booking booked: bookingList) {
+                if (booked
+                        .getBookingDate()
+                        .equals(requestedBookingDate)) {
+                    currentRoomCapacity++;
                 }
-
-
+            }
         }
-        double result = (numberOfWorkingPlace - currentRoomCapacity)/numberOfWorkingPlace;
+        double result = (numberOfWorkingPlace - currentRoomCapacity) / numberOfWorkingPlace;
 
         return (int) Math.round(result * 100);
     }
@@ -129,6 +123,7 @@ public class BookingServiceImplementation implements BookingService {
     public boolean isWorkingPlaceAvailable(Booking booking , List<Booking> bookingList) {
 
         if (bookingList.size() == 0) return true;
+
         int getCapacityOfRoom = booking
                 .getRoom()
                 .getCapacity();
@@ -169,9 +164,7 @@ public class BookingServiceImplementation implements BookingService {
                         .getId()
                         .equals(room.getId()))
                 .collect(Collectors.toList());
-//
-//        System.out.println("-------get  all room except the requested room");
-//        System.out.println(restOfTheRooms);
+
 
         // get all available room name with working place
         Set<RoomResponse> getAllAvailableRoomName = getAllRoomWithFreeWorkingPlace(bookingDate , restOfTheRooms);
@@ -229,7 +222,6 @@ public class BookingServiceImplementation implements BookingService {
 
         return requestDate.getTime() >= currentDate.getTime();
     }
-
 
 
 }

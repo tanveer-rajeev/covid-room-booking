@@ -23,6 +23,4 @@ public class Booking {
 
     private String username;
 
-    @Transient
-    private boolean trigger = true;
 }

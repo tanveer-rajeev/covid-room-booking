@@ -35,13 +35,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BookedNotificationHandler.class)
     public ResponseEntity<?> alreadyBookedNotificationHandling(BookedNotificationHandler bookedNotificationHandler){
 
-        // I tried to give an "BookedInfo" through when exception will trigger with HttpStatus.NOT_FOUND.
-        // But from client side I could not able to take that object when the exception triggered.
-
-        // That's why I have get "BookedInfo" directly .
-        // so from client side I just check a boolean variable "trigger" that common for both class
-        // "BookedInfo" and "Booking" and if (trigger) than given "success message"
-        // else given "already booked by name and available room list"
         return new ResponseEntity<>(bookedNotificationHandler.getBookedInfo(),HttpStatus.NOT_FOUND);
     }
 

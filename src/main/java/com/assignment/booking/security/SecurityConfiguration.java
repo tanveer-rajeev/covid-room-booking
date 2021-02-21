@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @EnableWebSecurity
@@ -19,11 +17,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
     @Autowired
     public SecurityConfiguration(UserDetailsService userDetailsService , BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService    = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+
     }
+
 
 
     @Override
@@ -40,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable()
+
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST , "/users/**")
                 .permitAll()
@@ -47,16 +49,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
 
                 .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-
-                .and()
                 .addFilter(new AuthenticationFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 .sessionManagement()
-                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 }

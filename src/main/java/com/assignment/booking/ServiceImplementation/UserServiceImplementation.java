@@ -29,6 +29,8 @@ public class UserServiceImplementation implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private Logger logger = Logger.getLogger(getClass().getName());
+
     @Autowired
     public UserServiceImplementation(UserRepository userRepository , ModelMapper modelMapper ,
                                      BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -60,7 +62,6 @@ public class UserServiceImplementation implements UserService {
     public ResponseEntity<?> signUpUser(UserDTO userDTO) throws Exception {
 
 
-
         if (userRepository.findByUsername(userDTO.getUsername()) != null) {
             throw new ResourceNotFoundException("- User name already exist: " + userDTO.getUsername());
         }
@@ -86,7 +87,7 @@ public class UserServiceImplementation implements UserService {
         User user = userRepository.findByUsername(userName);
 
         if (user == null) {
-            throw new ResourceNotFoundException("User not found " + userName);
+            throw new ResourceNotFoundException("- User name not found in the system: " );
         }
 
         return new MyUserDetails(user.getUsername() , user.getPassword() , new ArrayList<>() , true , true , true ,

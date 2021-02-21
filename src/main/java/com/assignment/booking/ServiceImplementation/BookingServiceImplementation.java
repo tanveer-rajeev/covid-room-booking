@@ -6,10 +6,12 @@ import com.assignment.booking.Exception.ResourceNotFoundException;
 import com.assignment.booking.DTO.BookedInfo;
 import com.assignment.booking.entity.Booking;
 import com.assignment.booking.entity.Room;
+import com.assignment.booking.entity.User;
 import com.assignment.booking.repository.BookingRepository;
 import com.assignment.booking.repository.RoomRepository;
 import com.assignment.booking.repository.UserRepository;
 import com.assignment.booking.response.RoomResponse;
+import com.assignment.booking.security.CurrentLoggedInUser;
 import com.assignment.booking.service.BookingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,17 +62,18 @@ public class BookingServiceImplementation implements BookingService {
 
         // check given user name validation during booking
         if (userRepository.findByUsername(bookingRequest.getUsername()) == null) {
-            throw new ResourceNotFoundException("User name not found in the system " + bookingRequest.getUsername());
+            throw new ResourceNotFoundException("! User name not found in the system " + bookingRequest.getUsername());
         }
 
         // check booking date validation
         if (!checkValidationOfBookingDate(bookingRequest.getBookingDate())) {
-            throw new ResourceNotFoundException("Booking date not valid " + bookingRequest.getBookingDate());
+            throw new ResourceNotFoundException("- Booking date not valid " + bookingRequest.getBookingDate());
         }
 
         Room requestedRoom = roomRepository.findByRoomName(roomName);
-
+        System.out.println(requestedRoom.getBooking());
         List<Booking> bookingList = requestedRoom.getBooking();
+
         bookingRequest.setRoom(requestedRoom);
 
         if (isWorkingPlaceAvailable(bookingRequest , bookingList)) {
@@ -82,7 +85,7 @@ public class BookingServiceImplementation implements BookingService {
 
         BookedInfo bookedInfo = getInformedForAvailableRoom(requestedRoom , bookingRequest.getBookingDate());
 
-        //return new ResponseEntity<>(bookedInfo , HttpStatus.ACCEPTED);
+      // return new ResponseEntity<>(bookedInfo , HttpStatus.NOT_FOUND);
 
         // Documentation is written  into "GlobalExceptionHandler"
         throw new BookedNotificationHandler("Already booked name list",bookedInfo );
@@ -92,7 +95,7 @@ public class BookingServiceImplementation implements BookingService {
     public int getCapacityFreeWorkingPlace(String requestedBookingDate) throws ParseException {
 
         if (!checkValidationOfBookingDate(requestedBookingDate)) {
-            throw new ResourceNotFoundException("Booking date not valid " + requestedBookingDate);
+            throw new ResourceNotFoundException("- Booking date not valid " + requestedBookingDate);
         }
 
         List<Room> roomList = roomRepository.findAll();

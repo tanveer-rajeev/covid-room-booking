@@ -1,7 +1,7 @@
 package com.assignment.booking.controller;
-
 import com.assignment.booking.entity.Room;
 import com.assignment.booking.repository.RoomRepository;
+import com.assignment.booking.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,11 @@ import java.util.List;
 public class RoomController {
 
     private final RoomRepository roomRepository;
-
+    private final RoomService roomService;
     @Autowired
-    public RoomController( RoomRepository roomRepository) {
+    public RoomController(RoomRepository roomRepository, RoomService roomService) {
         this.roomRepository = roomRepository;
+        this.roomService = roomService;
     }
 
 
@@ -27,5 +28,10 @@ public class RoomController {
     @GetMapping
     public List<Room> getAllRoom(){
         return roomRepository.findAll();
+    }
+
+    @PostMapping
+    public Room addRoom(@RequestBody Room room){
+        return roomService.addRoom(room);
     }
 }

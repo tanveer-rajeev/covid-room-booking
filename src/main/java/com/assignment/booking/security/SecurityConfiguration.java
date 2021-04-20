@@ -26,7 +26,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -43,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()
 
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST , "/users/**")
+                .antMatchers(HttpMethod.POST , "/users/**","/rooms/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

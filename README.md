@@ -1,6 +1,6 @@
-# Updated Full Version for booking with completed features are present in this repo (https://github.com/tanveer-rajeev/tolet-server)
+# Updated Full Version for booking with new features are present in this repo --> [To-Let](https://github.com/tanveer-rajeev/tolet-server)
 
-## To-Let   (User Interface In Progress...)
+## To-Let 
 
 ### Features
    * This project provides help to find out different types of to-let / booking space by filtering user required
@@ -11,7 +11,10 @@
     
 
 
-
+```
+   Backend part has completed 
+   Frontend part is in progress
+```
 
 
 

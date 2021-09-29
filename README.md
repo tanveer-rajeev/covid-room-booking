@@ -1,4 +1,4 @@
-# Updated Full Version for booking with new features are present in this repo --> [To-Let](https://github.com/tanveer-rajeev/tolet-server)
+# Updated full version of booking with new features are present in this repo. Please check this out --> [To-Let](https://github.com/tanveer-rajeev/tolet-server)
 
 ## To-Let 
 

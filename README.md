@@ -1,8 +1,8 @@
 # Updated Full Version for booking with completed features are present in this repo (https://github.com/tanveer-rajeev/tolet-server)
 
-# To-Let   (User Interface In Progress...)
+## To-Let   (User Interface In Progress...)
 
-## Features
+### Features
    * This project provides help to find out different types of to-let / booking space by filtering user required
      - Filtering can be square feet, location, per day booking, rent range etc.
      - User will be able to make a booking or create own to-let

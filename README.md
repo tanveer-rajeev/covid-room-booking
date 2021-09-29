@@ -11,12 +11,6 @@
     
 
 
-```
-   Backend part has completed 
-   Frontend part is in progress
-```
-
-
 
 
 

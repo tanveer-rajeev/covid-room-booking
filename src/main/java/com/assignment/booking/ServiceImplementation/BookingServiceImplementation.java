@@ -55,7 +55,6 @@ public class BookingServiceImplementation implements BookingService {
     }
 
 
-
     @Override
     public ResponseEntity<?> makeBooking(BookingDTO bookingDTO , String roomName) throws ParseException {
         Booking bookingRequest = modelMapper.map(bookingDTO , Booking.class);

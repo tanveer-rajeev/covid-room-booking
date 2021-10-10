@@ -55,7 +55,7 @@ public class BookingServiceImplementation implements BookingService {
     }
 
 
-    // TODO: Make Booking
+
     @Override
     public ResponseEntity<?> makeBooking(BookingDTO bookingDTO , String roomName) throws ParseException {
         Booking bookingRequest = modelMapper.map(bookingDTO , Booking.class);
@@ -91,7 +91,6 @@ public class BookingServiceImplementation implements BookingService {
         throw new BookedNotificationHandler("Already booked name list",bookedInfo );
     }
 
-    // TODO: Get Capacity
     public int getCapacityFreeWorkingPlace(String requestedBookingDate) throws ParseException {
 
         if (!checkValidationOfBookingDate(requestedBookingDate)) {
@@ -122,7 +121,7 @@ public class BookingServiceImplementation implements BookingService {
         return (int) Math.round(result * 100);
     }
 
-    // TODO: check every working place into the room has  same booking date or not
+
     public boolean isWorkingPlaceAvailable(Booking booking , List<Booking> bookingList) {
 
         if (bookingList.size() == 0) return true;
@@ -142,7 +141,6 @@ public class BookingServiceImplementation implements BookingService {
         return getCapacityOfRoom != 0;
     }
 
-    // TODO: User get informed available room with working place and also booked user name
     public BookedInfo getInformedForAvailableRoom(Room room , String bookingDate) {
 
         // Room is already booked out by [NAME_1], [NAME_2], [NAME_n] on this day
